@@ -1,0 +1,40 @@
+# specs.yaml — the declarative registry.
+#
+# This is the only thing most teams need to edit. Adding a document type or a
+# field is a change here, not a code change. `type` is one of:
+#   str | int | float | bool | date | datetime
+# `required` defaults to true; mark optional fields false.
+
+invoice:
+  purpose: "Accounts-payable processing and three-way matching."
+  system_hint: >
+    You are an accounts-payable specialist. Read amounts in the document's own
+    currency and never convert. Treat the largest labelled total as the amount
+    payable unless a clearer 'balance due' is present.
+  fields:
+    invoice_number: { type: str, description: "The unique invoice identifier." }
+    vendor_name:    { type: str, description: "Legal name of the issuing vendor." }
+    invoice_date:   { type: date, description: "Date the invoice was issued.", required: false }
+    total_due:      { type: float, description: "Total amount payable, numeric only." }
+    currency:       { type: str, description: "ISO currency code, e.g. USD.", required: false }
+
+receipt:
+  purpose: "Expense reconciliation for reimbursements."
+  system_hint: >
+    You are an expense-reconciliation clerk. Identify the merchant and the grand
+    total actually paid, including tax.
+  fields:
+    merchant:      { type: str, description: "Name of the merchant or store." }
+    total_paid:    { type: float, description: "Grand total paid, numeric only." }
+    purchase_date: { type: date, description: "Date of purchase.", required: false }
+
+contract:
+  purpose: "Obligation tracking and renewal alerts."
+  system_hint: >
+    You are a contracts paralegal. Identify the named parties and the key dates.
+    Do not infer terms that are not written in the text.
+  fields:
+    party_a:        { type: str, description: "First named party to the agreement." }
+    party_b:        { type: str, description: "Second named party to the agreement." }
+    effective_date: { type: date, description: "Date the agreement takes effect.", required: false }
+    term_months:    { type: int, description: "Length of the term in months.", required: false }

@@ -1,0 +1,31 @@
+# Secrets / local environment — never commit real keys or endpoints.
+# Keep .env.example (the template) tracked; ignore everything else .env*.
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Virtualenv (managed by `uv sync`)
+.venv/
+
+# Test / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editor / OS cruft
+*.swp
+*.swo
+.DS_Store
+
+# Local Claude Code settings (machine-specific permissions etc.)
+.claude/settings.local.json

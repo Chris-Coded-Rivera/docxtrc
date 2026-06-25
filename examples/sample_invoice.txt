@@ -1,0 +1,18 @@
+ACME SUPPLY CO.
+123 Industrial Way, Springfield
+
+INVOICE
+
+Invoice Number: INV-2025-00842
+Invoice Date: 2025-11-03
+Bill To: Globex Corporation
+
+Description                Qty    Unit Price     Amount
+Steel brackets             100    $4.50          $450.00
+Mounting hardware kit       20    $12.25         $245.00
+
+Subtotal: $695.00
+Tax (8%): $55.60
+Total Due: $750.60 USD
+
+Payment terms: Net 30. Please reference the invoice number with payment.
