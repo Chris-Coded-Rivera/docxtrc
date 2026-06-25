@@ -1,5 +1,9 @@
 # docextract
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![LLM providers](https://img.shields.io/badge/LLM-Anthropic%20%7C%20OpenAI%20%7C%20Google%20%7C%20Ollama%20%7C%20OpenAI--compat-8A2BE2.svg)](#5-the-llm-is-a-one-method-ish-protocol--the-swap-and-multi-agent-point)
+
 A small, reliable document-extraction harness. You give it a **map** of document
 types and the fields each one should yield; it figures out which type a document
 is, switches into the right domain expertise, extracts the fields into a
@@ -343,3 +347,12 @@ examples/
 tests/
   test_extractor.py   end-to-end, runs fully offline
 ```
+
+---
+
+## License
+
+[MIT](LICENSE) © 2026 Chris Rivera. Permissive: use, modify, and distribute
+freely (including commercially) provided the copyright notice and license text
+are retained. The `![License: MIT]` badge above links to the full text in
+[`LICENSE`](LICENSE).
