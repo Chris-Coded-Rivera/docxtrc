@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![LLM providers](https://img.shields.io/badge/LLM-Anthropic%20%7C%20OpenAI%20%7C%20Google%20%7C%20Ollama%20%7C%20OpenAI--compat-8A2BE2.svg)](#5-the-llm-is-a-one-method-ish-protocol--the-swap-and-multi-agent-point)
+[![live check](https://img.shields.io/badge/live%20check-passing-brightgreen.svg)](docs/live-check-results.md)
 
 A small, reliable document-extraction harness. You give it a **map** of document
 types and the fields each one should yield; it figures out which type a document
