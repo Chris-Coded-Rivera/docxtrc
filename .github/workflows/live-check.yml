@@ -1,0 +1,64 @@
+name: live-check
+
+# Opt-in live end-to-end check against a real provider. Manual only — it needs
+# credentials/an endpoint and (for a private vLLM) network reachability, so it is
+# never run on push and never gates CI.
+#
+# Setup before running:
+#   * Repo Settings → Secrets and variables → Actions, add the secret(s) your
+#     chosen provider needs:
+#       OPENAI_BASE_URL   (openai-compat endpoint, e.g. http://host:8000/v1)
+#       OPENAI_API_KEY    (openai / openai-compat; any non-empty value for keyless servers)
+#       ANTHROPIC_API_KEY (anthropic)
+#       GEMINI_API_KEY    (google)
+#   * To reach a PRIVATE endpoint (e.g. a vLLM box on your tailnet), change
+#     `runs-on` below to a self-hosted runner that can route to it — hosted
+#     GitHub runners cannot reach your tailnet.
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "Provider"
+        type: choice
+        default: openai-compat
+        options: [anthropic, openai, google, ollama, openai-compat]
+      model:
+        description: "Model id (blank = provider default; required for openai-compat)"
+        type: string
+        default: ""
+      strict:
+        description: "Require the sample's known values (--strict)"
+        type: boolean
+        default: true
+
+jobs:
+  live:
+    # For a private endpoint, swap this for your self-hosted runner label.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Install project + all extras
+        run: uv sync --all-extras
+
+      - name: Live end-to-end check
+        env:
+          OPENAI_BASE_URL: ${{ secrets.OPENAI_BASE_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PROVIDER: ${{ inputs.provider }}
+          MODEL: ${{ inputs.model }}
+          STRICT: ${{ inputs.strict }}
+        run: |
+          uv run python scripts/live_check.py \
+            --provider "$PROVIDER" \
+            ${MODEL:+--model "$MODEL"} \
+            ${{ inputs.strict == true && '--strict' || '' }}

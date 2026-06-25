@@ -1,0 +1,43 @@
+name: CI
+
+# Offline CI: the whole suite runs without any API key or network (EchoLLM +
+# fake-client wiring tests), so this is safe on hosted runners. Live tests are
+# excluded automatically by `addopts = -m 'not live'` in pyproject.toml.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel an in-progress run when a newer commit is pushed to the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+
+      # --all-extras pulls in every provider SDK so the per-backend wiring tests
+      # (which `importorskip` openai/google/ollama) actually run, not just skip.
+      - name: Install project + all extras
+        run: uv sync --all-extras
+
+      - name: Run offline test suite
+        run: uv run pytest -q
+
+      - name: CLI offline smoke test
+        run: uv run python -m docextract.cli examples/sample_invoice.txt --offline
